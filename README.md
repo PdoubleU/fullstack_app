@@ -1,1 +1,1 @@
-# fullstack_app
+## Fullstack app (PHP, PosgreSQL, React)
