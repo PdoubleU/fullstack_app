@@ -13,9 +13,7 @@ function App() {
   
     const handleSumbit = async (e: any) => {
         e.preventDefault();
-        console.log("FORM ", name);
         const response = await authUsr(name);
-        console.log(response);
         if ('data' in response) setResult(response.data.user);
         
     };
