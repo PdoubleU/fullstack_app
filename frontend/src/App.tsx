@@ -1,58 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
+import React, { useState } from 'react';
 import './App.css';
+import { authApi } from './services/splitApis/authApi';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
+    const [name, setName] = useState("");
+    const [result, setResult] = useState("");
+    const [ authUsr ] = authApi.useAuthenticateAppUserMutation();
+  
+    const handleChange = (e: any) => {
+        setName(e.target.value);
+    };
+  
+    const handleSumbit = async (e: any) => {
+        e.preventDefault();
+        console.log("FORM ", name);
+        const response = await authUsr(name);
+        console.log(response);
+        if ('data' in response) setResult(response.data.user);
+        
+    };
+  
+    return (
+        <div className="App">
+            <form
+                onSubmit={(event) => handleSumbit(event)}
+            >
+                <label htmlFor="name">Name: </label>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={name}
+                    onChange={(event) => handleChange(event)}
+                />
+                <br />
+                <button type="submit">Submit</button>
+            </form>
+            <h1>{result as any}</h1>
+        </div>
+    );
 }
-
+  
 export default App;

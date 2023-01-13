@@ -6,15 +6,16 @@
     header("Access-Control-Max-Age: 3600");
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-    $dbconn = pg_connect("host=localhost port=5432 dbname=postgres user=postgres password=12345!");
+    $dbconn = pg_connect("host=localhost port=5432 dbname=car_rentals user=postgres password=12345!");
     if (!$dbconn) {
         die("ERRRORR: " . $dbconn);
     }
 
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    $xml = file_get_contents('php://input');
     $requestMethod = $_SERVER["REQUEST_METHOD"];
     $e = explode( '/', $uri );
-    echo "RESPONSE " . $e[1] . $requestMethod;
+    echo $xml;
 
     $data = "{ name: name, lastName: lastname, reqMethod: ".$requestMethod."}";
 
