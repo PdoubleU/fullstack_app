@@ -4,17 +4,23 @@ const authEndpoint = '/authenticate'
 
 export const authApi = fullstackAppApi.injectEndpoints({
   endpoints: (builder) => ({
-    authenticateAppUser: builder.mutation<{ user: string }, unknown>({
+    authenticateAdminAppUser: builder.mutation<{ isAdmin: boolean }, { login: string, pwd: string}>({
       query: (args) => {
-        console.log("ARGS ", args);
         return ({
           url: authEndpoint,
           method: 'POST',
           body: {
-            user: args,
+            credentials: args,
           },
         })
       }
     }),
+    authenticateStdAppUser: builder.query<{ isAdmin: boolean }, void> ({
+      query: () => {
+        return ({
+          url: authEndpoint,
+        })
+      }
+    })
   }),
 })

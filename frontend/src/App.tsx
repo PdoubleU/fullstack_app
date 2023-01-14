@@ -1,42 +1,24 @@
 import React, { useState } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
-import { authApi } from './services/splitApis/authApi';
+import Admin from './components/Admin';
+import Header from './components/Header';
+import Home from './components/Home';
+import User from './components/User';
 
 function App() {
-    const [name, setName] = useState("");
-    const [result, setResult] = useState("");
-    const [ authUsr ] = authApi.useAuthenticateAppUserMutation();
-  
-    const handleChange = (e: any) => {
-        setName(e.target.value);
-    };
-  
-    const handleSumbit = async (e: any) => {
-        e.preventDefault();
-        const response = await authUsr(name);
-        if ('data' in response) setResult(response.data.user);
-        
-    };
-  
     return (
-        <div className="App">
-            <form
-                onSubmit={(event) => handleSumbit(event)}
-            >
-                <label htmlFor="name">Name: </label>
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={name}
-                    onChange={(event) => handleChange(event)}
-                />
-                <br />
-                <button type="submit">Submit</button>
-            </form>
-            <h1>{result as any}</h1>
-        </div>
-    );
+        <BrowserRouter basename='car_rental'>
+            <div className='App'>
+                <Header/>
+            </div>
+            <Routes>
+                <Route path='/' element={<Home/>}/>
+                <Route path='/user' element={<User/>}/>
+                <Route path='/admin' element={<Admin/>}/>
+            </Routes>
+        </BrowserRouter>
+    )
 }
   
 export default App;
