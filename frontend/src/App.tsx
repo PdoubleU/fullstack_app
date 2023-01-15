@@ -5,6 +5,10 @@ import Admin from './components/Admin';
 import Header from './components/Header';
 import Home from './components/Home';
 import User from './components/User';
+import Cars from './components/UserSections/Cars';
+import Customers from './components/UserSections/Customers';
+import Payments from './components/UserSections/Payments';
+import Reservations from './components/UserSections/Reservations';
 
 function App() {
     return (
@@ -14,8 +18,13 @@ function App() {
             </div>
             <Routes>
                 <Route path='/' element={<Home/>}/>
-                <Route path='/user' element={<User/>}/>
-                <Route path='/admin' element={<Admin/>}/>
+                <Route path='user' element={<User/>}>
+                    <Route path='cars' element={<Cars />}/>
+                    <Route path='customers' element={<Customers />}/>
+                    <Route path='reservations' element={<Reservations />}/>
+                    <Route path='payments' element={<Payments />}/>
+                </Route>
+                <Route path='admin' element={<Admin/>}/>
             </Routes>
         </BrowserRouter>
     )

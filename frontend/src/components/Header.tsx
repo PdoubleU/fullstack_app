@@ -1,22 +1,17 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
 
 type Props = {}
 
 function Header({}: Props) {
   return (
     <div className='header'><h2>Main page</h2>
-        <ul>
-            <li>
-                <Link to='/'>Home</Link>
-            </li>
-            <li>
-                <Link to='/admin'>Admin page</Link>
-            </li>
-            <li>
-                <Link to='/user'>User page</Link>
-            </li>
-        </ul>
+        <nav>
+            <Link to='/'>Home</Link>
+            <Link to='/admin'>Admin page</Link>
+            <Link to='/user'>User page</Link>
+        </nav>
+        <Outlet/>
     </div>
   )
 }
