@@ -1,15 +1,16 @@
 import React from 'react'
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 
 type Props = {}
 
 function Header({}: Props) {
+  const cl = useLocation();
   return (
-    <div className='header'><h2>Main page</h2>
+    <div className='header'><h2>{cl.pathname.split('/')[1].toUpperCase()}</h2>
         <nav>
-            <Link to='/'>Home</Link>
-            <Link to='/admin'>Admin page</Link>
-            <Link to='/user'>User page</Link>
+            <Link style={{marginRight: '20px'}} to='home'>Home</Link>
+            <Link style={{marginRight: '20px'}} to='admin'>Admin</Link>
+            <Link to='user'>User</Link>
         </nav>
         <Outlet/>
     </div>

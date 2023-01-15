@@ -1,12 +1,16 @@
 import { fullstackAppApi } from '../fullstackAppApi'
 
+type Reservation = {}
+
+type ReservationsDTO = {}
+
 const reservationsEndpoint = '/reservations'
 
 const reservationsApiWithTags = fullstackAppApi.enhanceEndpoints({ addTagTypes: [''] })
 
 export const reservationsApi = reservationsApiWithTags.injectEndpoints({
   endpoints: (builder) => ({
-    getreservations: builder.query<unknown, undefined>({
+    getReservationsList: builder.query<any, void>({
       query: () => ({
         url: reservationsEndpoint,
       }),

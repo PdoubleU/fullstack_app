@@ -7,8 +7,6 @@ type NavigateTo = 'cars' | 'customers' | 'reservations' | 'payments'
 type Props = {}
 
 function User({}: Props) {
-  const { data, isLoading } = authApi.useAuthenticateStdAppUserQuery();
-  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement> ) => {
@@ -35,8 +33,6 @@ function User({}: Props) {
   return (
     <>
         <div>User</div>
-        {data && <h2>{data?.isAdmin}</h2>}
-        {isLoading && <p>Loading...</p>}
         <div>
           <button type='button' name='cars' onClick={handleClick}>Cars</button>
           <button type='button' name='customers' onClick={handleClick}>Customers</button>
