@@ -24,3 +24,5 @@ app.get('/', (request, response) => {
 app.get('/cars', db.getCars)
 app.get('/customers', db.getCustomers)
 app.get('/reservations', db.getReservations)
+app.post('/auth', db.authUser)
+app.get('/auth/stduser', db.stdUsrLogin)

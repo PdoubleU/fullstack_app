@@ -34,8 +34,26 @@ const getReservations = (request, response) => {
   })
 }
 
+const authUser = (request, response) => {
+  // fake authentication process and return true
+  response.status(200).json({
+    isAdmin: true
+  })
+}
+
+const stdUsrLogin = (request, response) => {
+  setTimeout(() =>  response.status(200).json({
+    user: {
+      type: 'std',
+      id: 'id12345'
+    }
+  }), 5000)
+}
+
 module.exports = {
   getCars,
   getCustomers,
-  getReservations
+  getReservations,
+  authUser,
+  stdUsrLogin
 }

@@ -1,13 +1,19 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
-import { fullstackAppApi, FULLSTACK_APP_API_REDUCER_KEY } from '../services/fullstackAppApi';
+import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+import authorizationReducer from "../data/auth/index";
+import stduserReducer from "../data/stduser/index";
+import {
+  fullstackAppApi,
+  FULLSTACK_APP_API_REDUCER_KEY,
+} from "../services/fullstackAppApi";
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    authorizationReducer,
+    stduserReducer,
     [FULLSTACK_APP_API_REDUCER_KEY]: fullstackAppApi.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(fullstackAppApi.middleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(fullstackAppApi.middleware),
 });
 
 export type AppDispatch = typeof store.dispatch;
