@@ -4,21 +4,20 @@ import './App.css';
 import Admin from './components/Admin';
 import Header from './components/Header';
 import Home from './components/Home';
-import User from './components/User';
-import Cars from './components/UserSections/Cars';
-import Customers from './components/UserSections/Customers';
-import Payments from './components/UserSections/Payments';
-import Reservations from './components/UserSections/Reservations';
+import Data from './components/Data';
+import Cars from './components/DataSections/Cars';
+import Customers from './components/DataSections/Customers';
+import Payments from './components/DataSections/Payments';
+import Reservations from './components/DataSections/Reservations';
 
 function App() {
     return (
         <BrowserRouter basename='car_rental'>
             <div className='App'>
                 <Header/>
-            </div>
-            <Routes>
+                <Routes>
                 <Route path='home' element={<Home/>}/>
-                <Route path='user' element={<User/>}>
+                <Route path='data' element={<Data/>}>
                     <Route path='cars' element={<Cars />}/>
                     <Route path='customers' element={<Customers />}/>
                     <Route path='reservations' element={<Reservations />}/>
@@ -26,7 +25,8 @@ function App() {
                 </Route>
                 <Route path='admin' element={<Admin/>}/>
             </Routes>
-        </BrowserRouter>
+        </div>
+        </BrowserRouter>    
     )
 }
   

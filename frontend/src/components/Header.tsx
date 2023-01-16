@@ -10,7 +10,7 @@ function Header({}: Props) {
         <nav>
             <Link style={{marginRight: '20px'}} to='home'>Home</Link>
             <Link style={{marginRight: '20px'}} to='admin'>Admin</Link>
-            <Link to='user'>User</Link>
+            <Link to='data'>Data</Link>
         </nav>
         <Outlet/>
     </div>
