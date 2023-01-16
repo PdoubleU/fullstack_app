@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "react-bootstrap/esm/Button";
 import Table from "react-bootstrap/Table";
 import { useAppSelector } from "../../data/hooks";
 import { customersApi } from "../../services/splitApis/customers";
@@ -11,7 +12,8 @@ const Customers = ({}: Props) => {
 
   return (
     <>
-      <div>Customers</div>
+      <h4>Customers</h4>
+      {isAdmin && <Button type="button">Add new record</Button>}
       {isLoading && <h1>Loading...</h1>}
       <Table striped bordered hover>
         <thead>

@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import { useAppSelector } from "../../data/hooks";
 import { reservationsApi } from "../../services/splitApis/reservations";
@@ -24,7 +25,8 @@ const Reservations = (props: Props) => {
 
   return (
     <>
-      <div>Reservations</div>
+      <h4>Reservations</h4>
+      {isAdmin && <Button type="button">Add new record</Button>}
       {isLoading && <h1>Loading...</h1>}
       <Table striped bordered hover>
         <thead>
