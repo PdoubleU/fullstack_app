@@ -22,6 +22,8 @@ app.get("/", (request, response) => {
 });
 
 app.get("/cars", db.getCars);
+app.post("/cars", db.postCar);
+app.post("/cars/:id", db.deleteCar);
 app.get("/customers", db.getCustomers);
 app.get("/reservations", db.getReservations);
 app.post("/auth", db.authUser);

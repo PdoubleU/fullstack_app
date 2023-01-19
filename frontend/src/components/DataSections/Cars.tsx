@@ -1,19 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import { useAppSelector } from "../../data/hooks";
 import { carsApi } from "../../services/splitApis/cars";
+import { AddCarModal } from "../modals/AddCarModal";
 
 type Props = {};
 
 const Cars = ({}: Props) => {
-  const { data, isLoading } = carsApi.useGetCarsListQuery();
+  const { data, isLoading, refetch } = carsApi.useGetCarsListQuery();
+  const [deleteCar, { isLoading: isDeleting }] = carsApi.useDeleteCarMutation();
   const isAdmin = useAppSelector((s) => s.authorizationReducer.isAdmin);
-  console.log(data);
+  const [addCarModalOpen, setAddCarModalOpen] = useState(false);
+
+  const toggleCloseModal = () => setAddCarModalOpen((s) => !s);
+
+  const handleDelete = async (data: { id: string }) => {
+    await deleteCar(data);
+    refetch();
+  };
+
   return (
     <>
       <h4>Cars</h4>
-      {isAdmin && <Button type="button">Add new record</Button>}
+      {isAdmin && (
+        <Button type="button" onClick={toggleCloseModal}>
+          Add new record
+        </Button>
+      )}
       {isLoading && <h1>Loading...</h1>}
       <Table striped bordered hover>
         <thead>
@@ -41,14 +55,25 @@ const Cars = ({}: Props) => {
                 <td>{elem.price_per_day.trimEnd()}</td>
                 {isAdmin && (
                   <>
-                    <td>Edit</td>
-                    <td>Delete</td>
+                    <td>
+                      <Button>Edit</Button>
+                    </td>
+                    <td>
+                      <Button
+                        onClick={() =>
+                          handleDelete({ id: elem.license_plate.trimEnd() })
+                        }
+                      >
+                        Delete
+                      </Button>
+                    </td>
                   </>
                 )}
               </tr>
             ))}
         </tbody>
       </Table>
+      <AddCarModal onClose={toggleCloseModal} show={addCarModalOpen} />
     </>
   );
 };
