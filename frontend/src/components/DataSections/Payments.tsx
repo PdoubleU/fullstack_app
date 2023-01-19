@@ -12,7 +12,7 @@ const Payments = (props: Props) => {
     <>
       <h4>Payments</h4>
       {isLoading && <h1>Loading...</h1>}
-      <Table striped bordered hover>
+      <Table striped bordered hover style={{ marginTop: "50px" }}>
         <thead>
           <tr>
             <th>#</th>

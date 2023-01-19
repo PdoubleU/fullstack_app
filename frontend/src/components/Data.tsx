@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import { Outlet, useNavigate } from "react-router-dom";
+import { testPayloadPrepare } from "../data/auth";
+import { useAppDispatch } from "../data/hooks";
 
 type Props = {};
 
 const Data = ({}: Props) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -65,6 +68,14 @@ const Data = ({}: Props) => {
           onClick={handleClick}
         >
           Payments
+        </Button>
+        <Button
+          variant="outline-primary"
+          type="button"
+          name="payments"
+          onClick={() => dispatch(testPayloadPrepare("crazy!"))}
+        >
+          Test createSlice
         </Button>
       </div>
       <Outlet />

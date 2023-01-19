@@ -28,7 +28,7 @@ const Reservations = (props: Props) => {
       <h4>Reservations</h4>
       {isAdmin && <Button type="button">Add new record</Button>}
       {isLoading && <h1>Loading...</h1>}
-      <Table striped bordered hover>
+      <Table striped bordered hover style={{ marginTop: "50px" }}>
         <thead>
           <tr>
             <th>#</th>
@@ -54,8 +54,12 @@ const Reservations = (props: Props) => {
                 <td>{countDays(elem.start_date, elem.end_date)}</td>
                 {isAdmin && (
                   <>
-                    <td>Edit</td>
-                    <td>Delete</td>
+                    <td>
+                      <Button>Edit</Button>
+                    </td>
+                    <td>
+                      <Button onClick={() => {}}>Delete</Button>
+                    </td>
                   </>
                 )}
               </tr>

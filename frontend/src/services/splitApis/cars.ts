@@ -9,17 +9,13 @@ export type CarObject = {
   price_per_day: number;
 };
 
-type CarsDTO = {
-  data: CarObject[];
-};
-
 const carsEndpoint = "/cars";
 
 export const carsApi = fullstackAppApi
   .enhanceEndpoints({ addTagTypes: ["Cars"] })
   .injectEndpoints({
     endpoints: (builder) => ({
-      getCarsList: builder.query<any, void>({
+      getCarsList: builder.query<CarObject[], void>({
         query: () => ({
           url: carsEndpoint,
         }),

@@ -21,14 +21,17 @@ const stdusrSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(authenticateStdUser.pending, (state) => {
+      .addCase(authenticateStdUser.pending, (state, action) => {
+        console.log("STD USR AUTH: ", action);
         state.status = "loading";
       })
       .addCase(authenticateStdUser.fulfilled, (state, action) => {
+        console.log("STD USR AUTH: ", action);
         state.status = "loaded";
         state.logged = false;
       })
-      .addCase(authenticateStdUser.rejected, (state) => {
+      .addCase(authenticateStdUser.rejected, (state, action) => {
+        console.log("STD USR AUTH: ", action);
         state.status = "failed";
       });
   },

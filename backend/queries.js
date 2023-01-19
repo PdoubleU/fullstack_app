@@ -36,7 +36,6 @@ const postCar = (request, response) => {
 };
 
 const deleteCar = (request, response) => {
-  console.log(request.params.id);
   pool.query(
     `delete from cars where license_plate='${request.params.id}';`,
     (error, results) => {
@@ -57,6 +56,36 @@ const getCustomers = (request, response) => {
   });
 };
 
+const postCustomer = (request, response) => {
+  const body = request.body;
+  pool.query(
+    `insert into customers values (
+      '${body.PESEL}',
+      '${body.first_name}',
+      '${body.last_name}',
+      '${body.email}',
+      '${body.phone_number}');`,
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json({ success: true, results });
+    }
+  );
+};
+
+const deleteCustomer = (request, response) => {
+  pool.query(
+    `delete from customers where national_id_number='${request.params.id}';`,
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json({ success: true, results });
+    }
+  );
+};
+
 const getReservations = (request, response) => {
   pool.query("SELECT * FROM reservations", (error, results) => {
     if (error) {
@@ -68,7 +97,6 @@ const getReservations = (request, response) => {
 
 const getPayments = async (request, response) => {
   const reservations = await pool.query("SELECT * FROM reservations");
-  console.log("RESERVATIONS ", reservations);
   pool.query("SELECT * FROM payments", (error, results) => {
     if (error) {
       throw error;
@@ -103,6 +131,8 @@ module.exports = {
   postCar,
   deleteCar,
   getCustomers,
+  postCustomer,
+  deleteCustomer,
   getReservations,
   getPayments,
   authUser,
