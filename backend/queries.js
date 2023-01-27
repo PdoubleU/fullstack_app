@@ -104,13 +104,38 @@ const getReservations = (request, response) => {
 };
 
 const getPayments = async (request, response) => {
-  const reservations = await pool.query("SELECT * FROM reservations");
   pool.query("SELECT * FROM payments", (error, results) => {
     if (error) {
-      throw error;
+      return response.status(403).json("Username or password are invalid");
     }
     response.status(200).json(results.rows);
   });
+};
+
+const addPayment = async (request, response) => {
+  pool.query(
+    `
+    INSERT INTO payments
+    (
+      discount,
+      price_per_day,
+      days
+    )
+    values (
+      ${request.body.discount},
+      ${request.body.price_per_day},
+      ${request.body.days}
+    );
+  `,
+    (error, results) => {
+      if (error) {
+        return response
+          .status(403)
+          .json("Something went wrong, try again later");
+      }
+      return response.status(200).json(results.rows);
+    }
+  );
 };
 
 const authUser = (request, response) => {
@@ -120,14 +145,21 @@ const authUser = (request, response) => {
       if (error || !results.rowCount) {
         return response.status(403).json("Username or password are invalid");
       }
-      return response
-        .status(200)
-        .json({
-          ...results.rows[0],
-          isAdmin: results.rows[0].user_type === "administrator",
-        });
+      return response.status(200).json({
+        ...results.rows[0],
+        isAdmin: results.rows[0].user_type === "administrator",
+      });
     }
   );
+};
+
+const getUsers = (request, response) => {
+  usersPool.query("SELECT login, user_type FROM app_users", (err, res) => {
+    if (err) {
+      return response.status(403).json("Something went wrong, try again later");
+    }
+    return response.status(200).json(res.rows);
+  });
 };
 
 module.exports = {
@@ -139,5 +171,7 @@ module.exports = {
   deleteCustomer,
   getReservations,
   getPayments,
+  addPayment,
   authUser,
+  getUsers,
 };

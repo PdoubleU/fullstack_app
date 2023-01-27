@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/esm/Form";
 import Modal from "react-bootstrap/Modal";
-import { customersApi } from "../../services/splitApis/customers";
+import { carsApi } from "../../services/splitApis/cars";
 
 const defaultState = {
-  PESEL: "",
-  first_name: "",
-  last_name: "",
-  email: "",
-  phone_number: "",
+  license_plate: "",
+  brand: "",
+  model: "",
+  production_year: 0,
+  seats_number: 0,
+  price_per_day: 0,
 };
 
 type AddCarrModalProps = {
@@ -17,14 +18,14 @@ type AddCarrModalProps = {
   show: boolean;
 };
 
-export const AddCustomerModal = (props: AddCarrModalProps) => {
+export const AddCarModal = (props: AddCarrModalProps) => {
   const [form, setForm] = useState(defaultState);
-  const [addCustomer, { isSuccess }] = customersApi.usePostCustomersMutation();
-  const { data, refetch } = customersApi.useGetCustomersListQuery();
+  const [addCar, { isSuccess }] = carsApi.usePostCarMutation();
+  const { data, isLoading, refetch } = carsApi.useGetCarsListQuery();
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    addCustomer(form);
+    addCar(form);
   };
 
   useEffect(() => {
@@ -56,51 +57,59 @@ export const AddCustomerModal = (props: AddCarrModalProps) => {
       <Modal.Body>
         <h4>Centered Modal</h4>
         <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="PESEL">
-            <Form.Label>PESEL</Form.Label>
+          <Form.Group className="mb-3" controlId="license_plate">
+            <Form.Label>License Plate</Form.Label>
             <Form.Control
               onChange={handleOnChange}
               type="text"
-              placeholder="PESEL"
+              placeholder="license plate"
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="first_name">
-            <Form.Label>First name</Form.Label>
+          <Form.Group className="mb-3" controlId="brand">
+            <Form.Label>Brand</Form.Label>
             <Form.Control
               onChange={handleOnChange}
               type="text"
-              placeholder="first name"
+              placeholder="brand"
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="last_name">
-            <Form.Label>Last name</Form.Label>
+          <Form.Group className="mb-3" controlId="model">
+            <Form.Label>Model</Form.Label>
             <Form.Control
               onChange={handleOnChange}
               type="text"
-              placeholder="last name"
+              placeholder="model"
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="email">
-            <Form.Label>Email</Form.Label>
+          <Form.Group className="mb-3" controlId="production_year">
+            <Form.Label>Production year</Form.Label>
             <Form.Control
               onChange={handleOnChange}
               type="text"
-              placeholder="email"
+              placeholder="production year"
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="phone_number">
-            <Form.Label>Phone number</Form.Label>
+          <Form.Group className="mb-3" controlId="seats_number">
+            <Form.Label>Seats number</Form.Label>
             <Form.Control
               onChange={handleOnChange}
               type="text"
-              placeholder="phone number"
+              placeholder="seats number"
             />
           </Form.Group>
 
+          <Form.Group className="mb-3" controlId="price_per_day">
+            <Form.Label>Price per day</Form.Label>
+            <Form.Control
+              onChange={handleOnChange}
+              type="text"
+              placeholder="price per day"
+            />
+          </Form.Group>
           <Button variant="primary" type="submit">
             Submit
           </Button>

@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import { Outlet, useNavigate } from "react-router-dom";
 import { testPayloadPrepare } from "../data/auth";
-import { useAppDispatch } from "../data/hooks";
+import { useAppDispatch, useAppSelector } from "../data/hooks";
 
 type Props = {};
 
 const Data = ({}: Props) => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const isAdmin = useAppSelector((s) => s.authorizationReducer.isAdmin);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -24,6 +24,9 @@ const Data = ({}: Props) => {
         break;
       case "payments":
         navigate("/data/payments");
+        break;
+      case "users":
+        navigate("/data/users");
         break;
       default:
         break;
@@ -69,14 +72,17 @@ const Data = ({}: Props) => {
         >
           Payments
         </Button>
-        <Button
-          variant="outline-primary"
-          type="button"
-          name="payments"
-          onClick={() => dispatch(testPayloadPrepare("crazy!"))}
-        >
-          Test createSlice
-        </Button>
+        {"  "}
+        {isAdmin && (
+          <Button
+            variant="outline-primary"
+            type="button"
+            name="users"
+            onClick={handleClick}
+          >
+            Users
+          </Button>
+        )}
       </div>
       <Outlet />
     </>

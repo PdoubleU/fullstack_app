@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Container, Nav, Navbar, Spinner } from "react-bootstrap";
-import { Link, Outlet, useLocation } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../data/hooks";
+import { Container, Nav, Navbar } from "react-bootstrap";
+import { Link, Outlet } from "react-router-dom";
+import { useAppSelector } from "../data/hooks";
 
 type Props = {};
 
@@ -14,8 +13,8 @@ function Header({}: Props) {
         <Container>
           <Navbar.Brand>User: {isAdmin ? "ADMIN" : "STANDARD"}</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link as={Link} style={{ marginRight: "20px" }} to="home">
-              Home
+            <Nav.Link as={Link} style={{ marginRight: "20px" }} to="about">
+              About
             </Nav.Link>
             <Nav.Link as={Link} to="data">
               Data

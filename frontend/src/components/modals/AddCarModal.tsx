@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/esm/Form";
 import Modal from "react-bootstrap/Modal";
@@ -20,13 +20,20 @@ type AddCarrModalProps = {
 
 export const AddCarModal = (props: AddCarrModalProps) => {
   const [form, setForm] = useState(defaultState);
-  const [addCar, { isLoading, isSuccess }] = carsApi.usePostCarMutation();
+  const [addCar, { isSuccess }] = carsApi.usePostCarMutation();
+  const { data, refetch } = carsApi.useGetCarsListQuery();
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     addCar(form);
-    props.onClose();
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      refetch();
+    }
+    return props.onClose();
+  }, [isSuccess]);
 
   const handleOnChange = (e: any) => {
     setForm((state) => ({

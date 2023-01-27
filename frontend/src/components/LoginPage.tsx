@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Spinner } from "react-bootstrap";
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import { useAppSelector } from "../data/hooks";
@@ -9,7 +10,7 @@ type Props = {};
 const LoginPage = (props: Props) => {
   const [login, setLogin] = useState("");
   const [pwd, setPwd] = useState("");
-  const [authUsr] = authApi.useAuthenticateAdminAppUserMutation();
+  const [authUsr, status] = authApi.useAuthenticateAdminAppUserMutation();
 
   const handleChangeLogin = (e: any) => {
     setLogin(e.target.value);
@@ -22,6 +23,8 @@ const LoginPage = (props: Props) => {
     e.preventDefault();
     await authUsr({ login, pwd });
   };
+
+  if (status.isLoading) return <Spinner />;
 
   return (
     <Form onSubmit={handleSubmit}>

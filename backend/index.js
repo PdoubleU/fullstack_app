@@ -30,3 +30,5 @@ app.post("/customers/:id", db.deleteCustomer);
 app.get("/reservations", db.getReservations);
 app.post("/auth", db.authUser);
 app.get("/payments", db.getPayments);
+app.post("/payments", db.addPayment);
+app.get("/users", db.getUsers);
