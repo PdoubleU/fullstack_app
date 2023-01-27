@@ -19,7 +19,7 @@ export const carsApi = fullstackAppApi
         query: () => ({
           url: carsEndpoint,
         }),
-        providesTags: () => ["Cars"],
+        providesTags: ["Cars"],
       }),
       postCar: builder.mutation<any, CarObject>({
         query: (body) => ({

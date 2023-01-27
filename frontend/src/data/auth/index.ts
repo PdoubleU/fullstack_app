@@ -3,6 +3,7 @@ import { authApi } from "../../services/splitApis/authApi";
 
 const initialState = {
   status: "idle",
+  isLogged: false,
   isAdmin: false,
 };
 
@@ -19,10 +20,6 @@ const authorizationSlice = createSlice({
         return { payload: testStatus };
       },
     },
-    setAuthorizedUser: (state, data) => {
-      console.log(state, data);
-      state.isAdmin = data.payload.isAdmin;
-    },
     handleAuthUserError: (state, e) => {
       state.status = "failed";
       console.error("Error while trying /auth: ", e);
@@ -33,8 +30,8 @@ const authorizationSlice = createSlice({
       .addMatcher(
         authApi.endpoints.authenticateAdminAppUser.matchFulfilled,
         (state, action) => {
-          console.log("CHECK THIS OUT ", action);
           state.isAdmin = action.payload.isAdmin;
+          state.isLogged = true;
           state.status = "loaded";
         }
       )
@@ -47,6 +44,6 @@ const authorizationSlice = createSlice({
   },
 });
 
-export const { testPayloadPrepare, setAuthorizedUser, handleAuthUserError } =
+export const { testPayloadPrepare, handleAuthUserError } =
   authorizationSlice.actions;
 export default authorizationSlice.reducer;

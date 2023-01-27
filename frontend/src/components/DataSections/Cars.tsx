@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import { useAppSelector } from "../../data/hooks";
@@ -12,6 +12,7 @@ const Cars = ({}: Props) => {
   const [deleteCar, { isLoading: isDeleting }] = carsApi.useDeleteCarMutation();
   const isAdmin = useAppSelector((s) => s.authorizationReducer.isAdmin);
   const [addCarModalOpen, setAddCarModalOpen] = useState(false);
+  const [reloadComponent, setReloadComponent] = useState(false);
 
   const toggleCloseModal = () => setAddCarModalOpen((s) => !s);
 
@@ -19,6 +20,10 @@ const Cars = ({}: Props) => {
     await deleteCar(data);
     refetch();
   };
+
+  useEffect(() => {
+    console.log("RELOAD");
+  }, [addCarModalOpen]);
 
   return (
     <>

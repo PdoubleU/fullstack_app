@@ -29,5 +29,4 @@ app.post("/customers", db.postCustomer);
 app.post("/customers/:id", db.deleteCustomer);
 app.get("/reservations", db.getReservations);
 app.post("/auth", db.authUser);
-app.get("/auth/stduser", db.stdUsrLogin);
 app.get("/payments", db.getPayments);

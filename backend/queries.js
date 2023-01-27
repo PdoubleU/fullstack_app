@@ -7,6 +7,14 @@ const pool = new Pool({
   port: 5432,
 });
 
+const usersPool = new Pool({
+  user: "admin",
+  host: "localhost",
+  database: "users",
+  password: "WsB12345!",
+  port: 5432,
+});
+
 const getCars = (request, response) => {
   pool.query("SELECT * FROM cars", (error, results) => {
     if (error) {
@@ -106,23 +114,19 @@ const getPayments = async (request, response) => {
 };
 
 const authUser = (request, response) => {
-  // fake authentication process and return true
-  console.log(request.body);
-  response.status(200).json({
-    isAdmin: true,
-  });
-};
-
-const stdUsrLogin = (request, response) => {
-  setTimeout(
-    () =>
-      response.status(200).json({
-        user: {
-          type: "std",
-          id: "id12345",
-        },
-      }),
-    5000
+  usersPool.query(
+    `SELECT login, user_type FROM app_users where login='${request.body.credentials.login}' and password='${request.body.credentials.pwd}'`,
+    (error, results) => {
+      if (error || !results.rowCount) {
+        return response.status(403).json("Username or password are invalid");
+      }
+      return response
+        .status(200)
+        .json({
+          ...results.rows[0],
+          isAdmin: results.rows[0].user_type === "administrator",
+        });
+    }
   );
 };
 
@@ -136,5 +140,4 @@ module.exports = {
   getReservations,
   getPayments,
   authUser,
-  stdUsrLogin,
 };

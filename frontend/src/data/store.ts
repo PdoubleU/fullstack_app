@@ -1,6 +1,5 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import authorizationReducer from "../data/auth/index";
-import stduserReducer from "../data/stduser/index";
 import {
   fullstackAppApi,
   FULLSTACK_APP_API_REDUCER_KEY,
@@ -9,7 +8,6 @@ import {
 export const store = configureStore({
   reducer: {
     authorizationReducer,
-    stduserReducer,
     [FULLSTACK_APP_API_REDUCER_KEY]: fullstackAppApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
