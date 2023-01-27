@@ -24,10 +24,12 @@ app.get("/", (request, response) => {
 app.get("/cars", db.getCars);
 app.post("/cars", db.postCar);
 app.post("/cars/:id", db.deleteCar);
+app.post("/cars/update/:id", db.updateCar);
 app.get("/customers", db.getCustomers);
 app.post("/customers", db.postCustomer);
 app.post("/customers/:id", db.deleteCustomer);
 app.get("/reservations", db.getReservations);
+app.post("/reservations", db.addReservation);
 app.post("/auth", db.authUser);
 app.get("/payments", db.getPayments);
 app.post("/payments", db.addPayment);

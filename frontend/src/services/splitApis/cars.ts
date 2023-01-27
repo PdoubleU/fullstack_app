@@ -36,5 +36,13 @@ export const carsApi = fullstackAppApi
         }),
         invalidatesTags: ["Cars"],
       }),
+      updateCar: builder.mutation<any, CarObject>({
+        query: (elem) => ({
+          url: `${carsEndpoint}/update/${elem.license_plate}`,
+          method: "POST",
+          body: elem,
+        }),
+        invalidatesTags: ["Cars"],
+      }),
     }),
   });

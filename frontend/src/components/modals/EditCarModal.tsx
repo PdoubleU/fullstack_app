@@ -2,53 +2,48 @@ import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/esm/Form";
 import Modal from "react-bootstrap/Modal";
-import { reservationsApi } from "../../services/splitApis/reservations";
+import { CarObject, carsApi } from "../../services/splitApis/cars";
 
-const defaultState = {
-  license_plate: "",
-  national_id_number: "",
-  start_date: "",
-  end_date: "",
-};
-
-type AddReservationModalProps = {
+type EditCarModalProps = {
   onClose: () => void;
   show: boolean;
+  data: CarObject | null;
+};
+const defaultState = {
+  license_plate: "",
+  brand: "",
+  model: "",
+  production_year: 0,
+  seats_number: 0,
+  price_per_day: 0,
 };
 
-const convertDateToIso = (date: string) => {
-  const darr = date.split("/"); // ["29", "1", "2016"]
-  const dobj = new Date(
-    parseInt(darr[2]),
-    parseInt(darr[1]) - 1,
-    parseInt(darr[0])
-  );
-  // Date {Fri Jan 29 2016 00:00:00 GMT+0530(utopia standard time)
-  console.log(dobj.toISOString());
-  return dobj.toISOString();
-};
-
-export const AddReservationModal = (props: AddReservationModalProps) => {
+export const EditCarModal = (props: EditCarModalProps) => {
   const [form, setForm] = useState(defaultState);
-  const [addReservation, { isSuccess }] =
-    reservationsApi.usePostReservationMutation();
-  const { data, isLoading, refetch } =
-    reservationsApi.useGetReservationsListQuery();
+  const [editCar, { isSuccess }] = carsApi.useUpdateCarMutation();
+  const { data, refetch } = carsApi.useGetCarsListQuery();
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    addReservation({
-      ...form,
-      start_date: convertDateToIso(form.start_date),
-      end_date: convertDateToIso(form.end_date),
-    });
+    if (!form) return;
+    else editCar(form);
   };
+
+  useEffect(() => {
+    if (props.data)
+      setForm({
+        ...props.data,
+        license_plate: props.data.license_plate.trimEnd(),
+        brand: props.data.brand.trimEnd(),
+        model: props.data.model.trimEnd(),
+      });
+  }, [props.data]);
 
   useEffect(() => {
     if (isSuccess) {
       refetch();
+      props.onClose();
     }
-    return props.onClose();
   }, [isSuccess]);
 
   const handleOnChange = (e: any) => {
@@ -79,33 +74,47 @@ export const AddReservationModal = (props: AddReservationModalProps) => {
               onChange={handleOnChange}
               type="text"
               placeholder="license plate"
+              defaultValue={form.license_plate}
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="national_id_number">
-            <Form.Label>PESEL</Form.Label>
+          <Form.Group className="mb-3" controlId="brand">
+            <Form.Label>Brand</Form.Label>
             <Form.Control
               onChange={handleOnChange}
               type="text"
-              placeholder="national_id_number"
+              placeholder="brand"
+              defaultValue={form.brand}
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="start_date">
-            <Form.Label>Start date</Form.Label>
+          <Form.Group className="mb-3" controlId="model">
+            <Form.Label>Model</Form.Label>
             <Form.Control
               onChange={handleOnChange}
               type="text"
-              placeholder="dd/mm/yyyy"
+              placeholder="model"
+              defaultValue={form.model}
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="end_date">
-            <Form.Label>End date</Form.Label>
+          <Form.Group className="mb-3" controlId="production_year">
+            <Form.Label>Production year</Form.Label>
             <Form.Control
               onChange={handleOnChange}
               type="text"
-              placeholder="dd/mm/yyyy"
+              placeholder="production year"
+              defaultValue={form.production_year}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="seats_number">
+            <Form.Label>Seats number</Form.Label>
+            <Form.Control
+              onChange={handleOnChange}
+              type="text"
+              placeholder="seats number"
+              defaultValue={form.seats_number}
             />
           </Form.Group>
 
@@ -115,6 +124,7 @@ export const AddReservationModal = (props: AddReservationModalProps) => {
               onChange={handleOnChange}
               type="text"
               placeholder="price per day"
+              defaultValue={form.price_per_day}
             />
           </Form.Group>
           <Button variant="primary" type="submit">

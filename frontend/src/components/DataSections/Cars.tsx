@@ -2,29 +2,35 @@ import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import { useAppSelector } from "../../data/hooks";
-import { carsApi } from "../../services/splitApis/cars";
+import { CarObject, carsApi } from "../../services/splitApis/cars";
 import { AddCarModal } from "../modals/AddCarModal";
+import { EditCarModal } from "../modals/EditCarModal";
 
 type Props = {};
 
 const Cars = ({}: Props) => {
   const { data, isLoading, refetch } = carsApi.useGetCarsListQuery();
-  const [deleteCar, { isLoading: isDeleting }] = carsApi.useDeleteCarMutation();
+  const [deleteCar] = carsApi.useDeleteCarMutation();
   const isAdmin = useAppSelector((s) => s.authorizationReducer.isAdmin);
   const [addCarModalOpen, setAddCarModalOpen] = useState(false);
-  const [reloadComponent, setReloadComponent] = useState(false);
+  const [editCarModalOpen, setEditCarModalOpen] = useState(false);
+
+  const [editableData, setEditableData] = useState<CarObject | null>(null);
 
   const toggleCloseModal = () => setAddCarModalOpen((s) => !s);
+  const toggleEditCarCloseModal = () => setEditCarModalOpen((s) => !s);
 
   const handleDelete = async (data: { id: string }) => {
     await deleteCar(data);
     refetch();
   };
+  const handleEdit = (data: CarObject) => {
+    setEditableData(data);
+  };
 
   useEffect(() => {
-    console.log("RELOAD");
-  }, [addCarModalOpen]);
-
+    if (editableData) toggleEditCarCloseModal();
+  }, [editableData]);
   return (
     <>
       <h4>Cars</h4>
@@ -61,7 +67,7 @@ const Cars = ({}: Props) => {
                 {isAdmin && (
                   <>
                     <td>
-                      <Button>Edit</Button>
+                      <Button onClick={() => handleEdit(elem)}>Edit</Button>
                     </td>
                     <td>
                       <Button
@@ -79,6 +85,11 @@ const Cars = ({}: Props) => {
         </tbody>
       </Table>
       <AddCarModal onClose={toggleCloseModal} show={addCarModalOpen} />
+      <EditCarModal
+        onClose={toggleEditCarCloseModal}
+        show={editCarModalOpen}
+        data={editableData}
+      />
     </>
   );
 };

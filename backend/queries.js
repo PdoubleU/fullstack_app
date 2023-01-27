@@ -18,7 +18,7 @@ const usersPool = new Pool({
 const getCars = (request, response) => {
   pool.query("SELECT * FROM cars", (error, results) => {
     if (error) {
-      throw error;
+      return response.status(403).json("Something went wrong, try again later");
     }
     response.status(200).json(results.rows);
   });
@@ -36,7 +36,9 @@ const postCar = (request, response) => {
       ${body.price_per_day});`,
     (error, results) => {
       if (error) {
-        throw error;
+        return response
+          .status(403)
+          .json("Something went wrong, try again later");
       }
       response.status(200).json({ success: true });
     }
@@ -48,9 +50,34 @@ const deleteCar = (request, response) => {
     `delete from cars where license_plate='${request.params.id}';`,
     (error, results) => {
       if (error) {
-        throw error;
+        return response
+          .status(403)
+          .json("Most likely that record is still in use! Can't delete!");
       }
       response.status(200).json({ success: true, results });
+    }
+  );
+};
+
+const updateCar = (request, response) => {
+  pool.query(
+    `update cars
+      set 
+      license_plate = '${request.body.license_plate}',
+      brand = '${request.body.brand}',
+      model = '${request.body.model}',
+      production_year = '${request.body.production_year}',
+      seats_number = '${request.body.seats_number}',
+      price_per_day = '${request.body.price_per_day}'
+      where license_plate = '${request.body.license_plate}';
+    `,
+    (error, results) => {
+      if (error) {
+        return response
+          .status(403)
+          .json("Most likely that record is still in use! Can't delete!");
+      }
+      return response.status(200).json({ success: true, results });
     }
   );
 };
@@ -58,7 +85,7 @@ const deleteCar = (request, response) => {
 const getCustomers = (request, response) => {
   pool.query("SELECT * FROM customers", (error, results) => {
     if (error) {
-      throw error;
+      return response.status(403).json("Something went wrong, try again later");
     }
     response.status(200).json(results.rows);
   });
@@ -75,7 +102,9 @@ const postCustomer = (request, response) => {
       '${body.phone_number}');`,
     (error, results) => {
       if (error) {
-        throw error;
+        return response
+          .status(403)
+          .json("Something went wrong, try again later");
       }
       response.status(200).json({ success: true, results });
     }
@@ -87,7 +116,9 @@ const deleteCustomer = (request, response) => {
     `delete from customers where national_id_number='${request.params.id}';`,
     (error, results) => {
       if (error) {
-        throw error;
+        return response
+          .status(403)
+          .json("Most likely that record is still in use! Can't delete!");
       }
       response.status(200).json({ success: true, results });
     }
@@ -97,7 +128,7 @@ const deleteCustomer = (request, response) => {
 const getReservations = (request, response) => {
   pool.query("SELECT * FROM reservations", (error, results) => {
     if (error) {
-      throw error;
+      return response.status(403).json("Something went wrong, try again later");
     }
     response.status(200).json(results.rows);
   });
@@ -125,6 +156,33 @@ const addPayment = async (request, response) => {
       ${request.body.discount},
       ${request.body.price_per_day},
       ${request.body.days}
+    );
+  `,
+    (error, results) => {
+      if (error) {
+        return response
+          .status(403)
+          .json("Something went wrong, try again later");
+      }
+      return response.status(200).json(results.rows);
+    }
+  );
+};
+const addReservation = async (request, response) => {
+  pool.query(
+    `
+    INSERT INTO reservations
+    (
+      license_plate,
+      national_id_number,
+      start_date,
+      end_date
+    )
+    values (
+      '${request.body.license_plate}',
+      '${request.body.national_id_number}',
+      '${request.body.start_date}',
+      '${request.body.end_date}'
     );
   `,
     (error, results) => {
@@ -166,10 +224,12 @@ module.exports = {
   getCars,
   postCar,
   deleteCar,
+  updateCar,
   getCustomers,
   postCustomer,
   deleteCustomer,
   getReservations,
+  addReservation,
   getPayments,
   addPayment,
   authUser,

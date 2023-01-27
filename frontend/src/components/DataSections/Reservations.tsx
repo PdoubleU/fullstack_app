@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import { useAppSelector } from "../../data/hooks";
 import { reservationsApi } from "../../services/splitApis/reservations";
+import { AddPaymentModal } from "../modals/AddPaymentModal";
+import { AddReservationModal } from "../modals/AddReservationModal";
 
 type Props = {};
 
@@ -22,11 +24,19 @@ export const countDays = (start: string, end: string) => {
 const Reservations = (props: Props) => {
   const { data, isLoading } = reservationsApi.useGetReservationsListQuery();
   const isAdmin = useAppSelector((s) => s.authorizationReducer.isAdmin);
+  const [addReservationModalOpen, setAddReservationModalOpen] = useState(false);
+  const [addPaymentModalOpen, setaddPaymentModalOpen] = useState(false);
+  const toggleCloseModal = () => setAddReservationModalOpen((s) => !s);
+  const toggleClosePaymentModal = () => setaddPaymentModalOpen((s) => !s);
 
   return (
     <>
       <h4>Reservations</h4>
-      {isAdmin && <Button type="button">Add new record</Button>}
+      {isAdmin && (
+        <Button type="button" onClick={toggleCloseModal}>
+          Add new record
+        </Button>
+      )}
       {isLoading && <h1>Loading...</h1>}
       <Table striped bordered hover style={{ marginTop: "50px" }}>
         <thead>
@@ -46,7 +56,18 @@ const Reservations = (props: Props) => {
             data.map((elem: any, index: number) => (
               <tr key={elem.id}>
                 <td>{elem.id}</td>
-                <td>{!elem.payment_id ? "Not issued yet" : elem.payment_id}</td>
+                <td>
+                  {!elem.payment_id ? (
+                    <>
+                      <p>"Not issued yet"</p>{" "}
+                      <Button type="button" onClick={toggleClosePaymentModal}>
+                        Issue invoice
+                      </Button>
+                    </>
+                  ) : (
+                    elem.payment_id
+                  )}
+                </td>
                 <td>{elem.national_id_number.trimEnd()}</td>
                 <td>{elem.license_plate.trimEnd()}</td>
                 <td>{isoToDDMMYYYYFormat(elem.start_date)}</td>
@@ -66,6 +87,14 @@ const Reservations = (props: Props) => {
             ))}
         </tbody>
       </Table>
+      <AddReservationModal
+        show={addReservationModalOpen}
+        onClose={toggleCloseModal}
+      />
+      <AddPaymentModal
+        show={addPaymentModalOpen}
+        onClose={toggleClosePaymentModal}
+      />
     </>
   );
 };
